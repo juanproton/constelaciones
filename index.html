@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Constelaciones de investigación</title>
+	<title>Constelaciones</title>
 
 	<script src="libraries/p5.js"></script>
 	<script src="libraries/p5.dom.js"></script>
@@ -17,6 +17,7 @@
 	var postsIndex;
 	var labels = [];
 	var title;
+	var date;
 	var posts = [];
 	var url;
 	var r = 400;;
@@ -25,14 +26,16 @@
 	var inside = false;
 	let pr;
 	var time = 0;
-					var rr = 0;
+	var rr = 0;
 	var font;
+	var mainGraphic;
+	var offGraphic;
 
 	function setup() {
 		font = loadFont('assets/Helvetica.otf');
+		mainGraphic = createGraphics(800, 800);
 
-
-	  createCanvas(displayWidth, displayHeight);
+	  createCanvas(window.innerWidth, window.innerHeight);
 		att = new Attractor(width/2, height/2);
 	  background(25);
 		inside = false;
@@ -64,13 +67,14 @@
 	    labels = data.items[i].labels;
 	    title = data.items[i].title;
 			url = data.items[i].url;
+			date = data.items[i].published;
 
 	    var radius = random(r);
 	    var a = random(TWO_PI);
 	    var x = width / 2 + cos(a) * radius;
 	    var y = height / 2 + sin(a) * radius;
 
-	    let p = new Planet(x, y, 5, labels, title,url, i, random(0, 255), 255, 50, random(100));
+	    let p = new Planet(x, y, 5, labels, title,url,date, i, random(0, 255), 255, 100, random(100));
 	    var overlapping = false;
 
 	    for (var j = 0; j < planet.length; j++) {
@@ -91,6 +95,7 @@
 	function draw() {
 
 		  // background(val);
+			noStroke();
 			fill(0, 25);
 			rect(0, 0, width, height);
 		mouseInside(mouseX, mouseY);
@@ -155,6 +160,7 @@
 			// var force = att.attract(planet[i]);
 	    planet[i].isOver(mouseX, mouseY);
 			planet[i].isCasiOver(mouseX, mouseY);
+			planet[i].openWin()
 			// planet[i].applyForce(force);
 			// planet[i].move();
 
@@ -200,6 +206,7 @@
 		p.applyForce(force);
 		p.move();
 
+
 			// console.log(p.c);
 	    var conectado = false;
 	    for (let other of planet) {
@@ -225,13 +232,14 @@
 
 	class Planet {
 
-	  constructor(x, y, r, labels, title, url, id, h, s, b, mass) {
+	  constructor(x, y, r, labels, title, url, date, id, h, s, b, mass) {
 
 	    this.v1 = createVector(x, y);
 	    this.r = r;
 	    this.labels = labels;
 	    this.title = title;
 			this.url = url;
+			this.date = date;
 	    this.over = false;
 	    this.brightness = 255;
 	    this.id = id;
@@ -244,6 +252,7 @@
 			this.acell = createVector(0,0);
 			this.vel = 10;
 			this.mass = mass;
+			this.rr = rr;
 
 	  }
 
@@ -314,7 +323,7 @@ move(){
 	      this.brightness = 0;
 				this.open = true;
 				// pagina();
-       // window.location= this.url;
+       window.location= this.url;
        // var html = text.link(this.url);
 
 	      return true;
@@ -343,7 +352,7 @@ move(){
 					this.b = this.b+=5;
 				}
 	    } else {
-				if(this.b >= 50){
+				if(this.b >= 100){
 					this.b = this.b-=5;
 				}
 	      this.over = false;
@@ -354,6 +363,30 @@ move(){
 		isCasiOver(px, py) {
 			this.r = map(dist(px, py, this.v1.x, this.v1.y), 0, r, 10, 5);
 			// this.r = map(mouseY, 0, r*2,10, 50 )
+		}
+
+		openWin(){
+			if(this.over){
+				// console.log("open");
+				if(this.rr<440){
+						this.rr+=10;
+				}
+				fill(0);
+				rect(this.v1.x, this.v1.y, this.rr, this.rr/7);
+				noStroke();
+				fill(255);
+				textSize(15);
+				text("Título: " + this.title, this.v1.x+10, this.v1.y+20);
+				textSize(10);
+				fill(255, 255, 255);
+				text("Etiquetas: " + this.labels, this.v1.x+10, this.v1.y+40);
+				textSize(8);
+				fill(90, 255, 255);
+				text("Fecha: " + this.date, this.v1.x+10, this.v1.y+50);
+			}else{
+				// console.log("close");
+			}
+
 		}
 
 
@@ -433,6 +466,3 @@ move(){
 </body>
 </html>
 
-<body>
-</body>
-</html>
