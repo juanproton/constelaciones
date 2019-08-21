@@ -17,34 +17,92 @@
 	var postsIndex;
 	var labels = [];
 	var title;
+	var date;
+	var content;
 	var posts = [];
 	var url;
-	var r = 400;;
+	var r = 300;;
 	var val = 0;
 	var button;
 	var inside = false;
 	let pr;
 	var time = 0;
-					var rr = 0;
+	var rr = 0;
 	var font;
+	var mainGraphic;
+	var offGraphic;
+
+	var dateOrder;
+	var labelOrder;
+	var displayLines;
+	var option;
+	var input;
+	var inputButton;
+	var xX = 100;
+
 
 	function setup() {
-		font = loadFont('assets/Helvetica.otf');
+		mainGraphic = createGraphics(800, 800);
 
-
-	  createCanvas(displayWidth, displayHeight);
-		att = new Attractor(width/2, height/2);
-	  background(25);
+	  createCanvas(window.innerWidth, window.innerHeight);
+		att = new Attractor(width/2+200, height/2);
+	  background(0);
 		inside = false;
-	  loadJSON('https://www.googleapis.com/blogger/v3/blogs/6719264076843274138/posts?key=AIzaSyDljSVan2cU0a0kq0iqF0cglFUzXnWgRP8', gotData);
+	  loadJSON('https://www.googleapis.com/blogger/v3/blogs/6221658020817299874/posts?maxResults=40&key=AIzaSyBgX-VyMBkl10Uyknz383uXs1V7nPBXFrg', gotData);
 	  smooth();
 		colorMode(HSB, 255);
-	  // button = createButton('click me');
-	  // button.position(50, 300);
-	  // button.mousePressed(changebackground);
+
 
 		pr = new Preview();
 		strokeWeight(4);
+
+		dateOrder = createButton('fecha', false);
+		dateOrder.position(50, xX);
+		option = createSelect();
+		option.position(50, xX);
+		option.option("fecha");
+		option.option("label");
+		option.option("unidad");
+		option.changed(mySelectEvent);
+		// labelOrder = createButton('tag', false);
+		// labelOrder.position(50, xX+25);
+		// displayLines = createButton('connexión', false);
+		// displayLines.position(50, xX+50);
+
+		input = createInput();
+		input.position(50, xX+25);
+
+		inputButton = createButton("buscar");
+		inputButton.position(185, xX+25);
+		inputButton.mousePressed(search);
+		// button.mousePressed();
+
+	}
+
+	function mySelectEvent() {
+	  var item = option.value();
+		textFont('Helvetica');
+ 	  stroke(0);
+ 		fill(0);
+ 		textStyle(NORMAL);
+ 		textSize(20);
+	  text('It is a ' + item + '!', 50, 250);
+
+		if(item == "fecha"){
+			console.log("FECHA");
+		}
+		if(item == "label"){
+			console.log("LABEL");
+		}
+		if(item == "unidad"){
+			console.log("UNIDAD");
+		}
+
+	}
+
+	function search(){
+		const name = input.value();
+		console.log(name);
 	}
 
 	function changebackground() {
@@ -56,6 +114,8 @@
 	  postsIndex = data.items.length;
 	  posts = data.items;
 
+			console.log(postsIndex);
+
 	  // fill(255);
 
 	  text("posts: " + postsIndex, 50, 100);
@@ -64,13 +124,15 @@
 	    labels = data.items[i].labels;
 	    title = data.items[i].title;
 			url = data.items[i].url;
+			date = data.items[i].published;
+			content = data.items[i].content;
 
 	    var radius = random(r);
 	    var a = random(TWO_PI);
-	    var x = width / 2 + cos(a) * radius;
-	    var y = height / 2 + sin(a) * radius;
+	    var x = width / 2 + 200 + cos(a) * radius;
+	    var y = height / 2  + sin(a) * radius;
 
-	    let p = new Planet(x, y, 5, labels, title,url, i, random(0, 255), 255, 50, random(100));
+	    let p = new Planet(x, y, 5, labels, title,url,date,content, i, random(0, 255), 255, 100, random(100));
 	    var overlapping = false;
 
 	    for (var j = 0; j < planet.length; j++) {
@@ -90,24 +152,24 @@
 
 	function draw() {
 
-		  // background(val);
-			fill(0, 25);
-			rect(0, 0, width, height);
+		  background(255);
+		// noStroke();
+		// fill(0, 25);
+		// rect(0, 0, width, height);
 		mouseInside(mouseX, mouseY);
 	  connected();
 	  // console.log(frameRate());
-		textFont('Helvetica');
-	  stroke(255);
 
+		textFont('Helvetica');
+	  stroke(0);
+		fill(0);
 		textStyle(NORMAL);
 		textSize(20);
-		text("CONSTELACIONES", 50, 50)
-	  text("v 1.5", 50, 70);
-
-	  text("ENTRADAS: " + postsIndex, 50, 90);
+		text("ANÁLISIS Y CRÍTICA - FBA", 50, 25)
+		text("CONSTELACIONES DE INVESTIGACIÓN", 50, 50)
+	  text("ENTRADAS: " + postsIndex, 50, 75);
 
 		strokeWeight(1);
-
 
 
 		for(var i = 0; i < planet.length; i++){
@@ -116,27 +178,13 @@
 			// text(p.labels, 50, 90+i*20);  // arreglar si se repite borrar de la lista.
 		}
 
-		//
-		// if(inside==true){
-		//
-		// 	if(rr <= r*2){
-		// 		rr+=5;
-		// 		// stroke(255, -rr);
-		// 		ellipse(width/2, height/2, rr, rr);
-		// 	}else{
-		// 		ellipse(width/2, height/2, rr, rr);
-		// 	}
-		//
-		// }else{
-		// 	rr = 0;
-		// }
 		fill(0, 5)
-		ellipse(width/2, height/2, r*2, r*2);
+		ellipse(width/2 + 200, height/2, r*2, r*2);
 		att.display();
 
 	  if(pr.open==true){
 
-	   time+=sin(0.1);
+	   time+=sin(0.2);
 	    if(time >=1){
 	      time = 1;
 	    }
@@ -149,12 +197,11 @@
 	  stroke(255);
 
 
-
-
 	  for (var i = 0; i < planet.length; i++) {
 			// var force = att.attract(planet[i]);
 	    planet[i].isOver(mouseX, mouseY);
 			planet[i].isCasiOver(mouseX, mouseY);
+			planet[i].openWin()
 			// planet[i].applyForce(force);
 			// planet[i].move();
 
@@ -169,7 +216,7 @@
 	}
 
 	 function mouseInside(px, py){
-		let d = dist(px, py, width/2, height/2);
+		let d = dist(px, py, width/2+200, height/2);
 
 		if(d < r){
 			inside = true;
@@ -198,7 +245,8 @@
 		p.display(mouseX, mouseY);
 		var force = att.attract(p);
 		p.applyForce(force);
-		p.move();
+		// p.move();
+
 
 			// console.log(p.c);
 	    var conectado = false;
@@ -209,15 +257,17 @@
 					// fill(p.s, p.h, p.b, 25);
 					// console.log(p.c);
 
-					stroke(p.h, p.s, p.b);
+					stroke(p.h, p.s, p.b, 10);
 	        beginShape();
 
 	        vertex(p.v1.x, p.v1.y);
-	        quadraticVertex(width/2, height/2,other.v1.x, other.v1.y);
+	        quadraticVertex(width/2+200, height/2,other.v1.x, other.v1.y);
+					// vertex(other.v1.x, other.v1.y);
+//
 	        endShape();
 	      }
 	    }
-			// pop();
+			pop();
 
 	  }
 
@@ -225,13 +275,15 @@
 
 	class Planet {
 
-	  constructor(x, y, r, labels, title, url, id, h, s, b, mass) {
+	  constructor(x, y, r, labels, title, url, date,content, id, h, s, b, mass) {
 
 	    this.v1 = createVector(x, y);
 	    this.r = r;
 	    this.labels = labels;
 	    this.title = title;
 			this.url = url;
+			this.content = content;
+			this.date = date;
 	    this.over = false;
 	    this.brightness = 255;
 	    this.id = id;
@@ -244,6 +296,9 @@
 			this.acell = createVector(0,0);
 			this.vel = 10;
 			this.mass = mass;
+			this.rr = rr;
+
+
 
 	  }
 
@@ -314,10 +369,12 @@ move(){
 	      this.brightness = 0;
 				this.open = true;
 				// pagina();
-       // window.location= this.url;
+       window.location= this.url;
+
        // var html = text.link(this.url);
 
 	      return true;
+
 	    } else {
 	      this.brightness = 255;
 
@@ -343,7 +400,7 @@ move(){
 					this.b = this.b+=5;
 				}
 	    } else {
-				if(this.b >= 50){
+				if(this.b >= 100){
 					this.b = this.b-=5;
 				}
 	      this.over = false;
@@ -354,6 +411,33 @@ move(){
 		isCasiOver(px, py) {
 			this.r = map(dist(px, py, this.v1.x, this.v1.y), 0, r, 10, 5);
 			// this.r = map(mouseY, 0, r*2,10, 50 )
+		}
+
+		openWin(){
+			if(this.over){
+				// console.log("open");
+
+				noStroke();
+				fill(0);
+				textSize(25);
+
+				text("Título: " + this.title, 50, 175);
+
+				textSize(12);
+				fill(255, 255, 255);
+				text("Etiquetas: " + this.labels, 50, 195);
+				textSize(10);
+				fill(0);
+				text("Fecha: " + this.date, 50, 215);
+
+				var test = this.content;
+				var q = splitTokens(test, '\"');
+
+				text(" " + q[1], 50, 240);
+			}else{
+				// console.log("close");
+			}
+
 		}
 
 
