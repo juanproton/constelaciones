@@ -12,7 +12,7 @@ var time = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(25);
+  background(0);
 	inside = false;
   loadJSON('https://www.googleapis.com/blogger/v3/blogs/6719264076843274138/posts?key=AIzaSyDljSVan2cU0a0kq0iqF0cglFUzXnWgRP8', gotData);
   smooth();
