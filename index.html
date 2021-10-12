@@ -4,76 +4,16 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Constelaciones</title>
-	<script src="libraries/p5.js"></script>
-	<script src="libraries/p5.dom.js"></script>
-	<script src="libraries/p5.sound.js"></script>
+	<title>INTERFERENCES</title>
+	
+	
 	<script>
-
-	let planet = [];
-	let att;
-	var postsIndex;
-	var labels = [];
-	var title;
-	var date;
-	var content;
-	var posts = [];
-	var url;
-	var r = 300;;
-	var val = 0;
-	var button;
-	var inside = false;
-	let pr;
-	var time = 0;
-	var rr = 0;
-	var font;
-	var mainGraphic;
-	var offGraphic;
-
-	var dateOrder;
-	var labelOrder;
-	var displayLines;
-	var option;
-	var input;
-	var inputButton;
-	var xX = 100;
 
 
 	function setup() {
-		mainGraphic = createGraphics(800, 800);
-
+	
 	  createCanvas(window.innerWidth, window.innerHeight);
-		att = new Attractor(width/2+200, height/2);
-	  background(0);
-		inside = false;
-	  loadJSON('https://www.googleapis.com/blogger/v3/blogs/6221658020817299874/posts?maxResults=40&key=AIzaSyBgX-VyMBkl10Uyknz383uXs1V7nPBXFrg', gotData);
-	  smooth();
-		colorMode(HSB, 255);
-
-
-		pr = new Preview();
-		strokeWeight(4);
-
-		dateOrder = createButton('fecha', false);
-		dateOrder.position(50, xX);
-		option = createSelect();
-		option.position(50, xX);
-		option.option("fecha");
-		option.option("label");
-		option.option("unidad");
-		option.changed(mySelectEvent);
-		// labelOrder = createButton('tag', false);
-		// labelOrder.position(50, xX+25);
-		// displayLines = createButton('connexión', false);
-		// displayLines.position(50, xX+50);
-
-		input = createInput();
-		input.position(50, xX+25);
-
-		inputButton = createButton("buscar");
-		inputButton.position(185, xX+25);
-		inputButton.mousePressed(search);
-		// button.mousePressed();
+		background(0);
 
 	}
 
